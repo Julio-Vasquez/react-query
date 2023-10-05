@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 500px;
+}
+
+.loading {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.error {
+  font-size: 18px;
+  font-weight: 800;
+  color: red;
+}
