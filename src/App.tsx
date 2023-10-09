@@ -1,17 +1,9 @@
-import SimpleFetch from './components/SimpleFetch'
-import SimpleFetchRQ from './components/SimpleFetchRQ'
-
-import './App.css'
+import Router from './Router'
 
 function App() {
   return (
-    <div className="app">
-      <div>
-        <SimpleFetch />
-      </div>
-      <div>
-        <SimpleFetchRQ />
-      </div>
+    <div className="container m-3">
+      <Router />
     </div>
   )
 }

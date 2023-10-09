@@ -1,4 +1,4 @@
-import { useFetchRQ } from '../../hooks/useFetchRQ'
+import { useFetchRQ } from '../../../hooks/useFetchRQ'
 
 import './styles.css'
 
