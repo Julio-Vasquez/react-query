@@ -1,12 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
-
-import { lazyLoad } from './utils/lazy-load'
-
-const SimpleFetch = lazyLoad('./views/Fetch')
-const ListIssues = lazyLoad('./views/Issues/ListIssues')
-const Issue = lazyLoad('./views/Issues/Issue')
-const Issues = lazyLoad('./views/Issues')
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
 export const Paths = {
   fetch: '/simple-fetch',
@@ -18,35 +11,39 @@ export const Paths = {
   },
 }
 
-const fetchObj: RouteObject = {
-  element: <SimpleFetch />,
-  path: Paths.fetch,
-}
-
-const issuesObj: RouteObject = {
-  path: Paths.issues.path,
-  element: <Issues />,
-  children: [
-    { path: Paths.issues.children.list, element: <ListIssues /> },
-    { path: Paths.issues.children.issue, element: <Issue /> },
-    {
-      path: Paths.issues.children.redirect,
-      element: <Navigate to={Paths.issues.children.list} />,
-    },
-  ],
-}
-
-const notFoundObj: RouteObject = {
-  path: Paths['not-found'],
-  element: <h1>Not Found</h1>,
+const lazy = async (path: string) => {
+  const { default: Component } = await import(path)
+  return Component ?? <></>
 }
 
 export const router = createBrowserRouter([
-  fetchObj,
-  issuesObj,
   {
-    path: Paths.redirect,
-    element: <Navigate to={Paths.fetch} />,
+    path: Paths.fetch,
+    lazy: async () => ({ Component: await lazy('./views/Fetch') }),
   },
-  notFoundObj,
+  {
+    path: Paths.issues.path,
+    lazy: async () => ({ Component: await lazy('./views/Issues') }),
+    children: [
+      {
+        path: Paths.issues.children.list,
+        lazy: async () => ({
+          Component: await lazy('./views/Issues/ListIssues'),
+        }),
+      },
+      {
+        path: Paths.issues.children.issue,
+        lazy: async () => ({
+          Component: await lazy('./views/Issues/Issue'),
+        }),
+      },
+      {
+        path: Paths.issues.children.redirect,
+        element: <Navigate to={Paths.issues.children.list} />,
+      },
+    ],
+  },
+
+  { path: Paths.redirect, element: <Navigate to={Paths.fetch} /> },
+  { path: Paths['not-found'], element: <h1>Not Found</h1> },
 ])

@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 
 export const lazyLoad = (path: string) => {
-  const Component = lazy(() => import(`../${path}`))
+  const component = lazy(() => import(`../${path}`))
 
-  return Component ?? <></>
+  return component ?? <></>
 }
